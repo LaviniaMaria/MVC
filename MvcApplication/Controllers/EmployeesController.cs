@@ -6,13 +6,14 @@ using System.Web.Mvc;
 using EmployeesService.Entities;
 using EmployeesManager.Entities;
 using MvcApplication.Models;
+using PagedList;
 
 namespace MvcApplication.Controllers
 {
     public class EmployeesController : Controller
     {
         
-        public ActionResult Index()
+        public ActionResult Index(int? page)
         {
             EmployeeService empServ = new EmployeeService();
             List<Employee> employeesList;
@@ -34,7 +35,12 @@ namespace MvcApplication.Controllers
                 employeeModelList.Add(employeeModel);
 
             }
-            return View(employeeModelList);
+
+            int pageSize = 5;
+            int pageNumber =(page ?? 1);
+
+            return View(employeeModelList.ToPagedList(pageNumber, pageSize));
+           
         }
 
 
