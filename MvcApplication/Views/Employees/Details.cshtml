@@ -1,0 +1,30 @@
+﻿@model MvcApplication.Models.EmployeeModel
+
+<fieldset>
+    <legend>EmployeeModel</legend>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Name)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Name)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.NameManager)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.NameManager)
+    </div>
+
+    <div class="display-label">
+         @Html.DisplayNameFor(model => model.Salary)
+    </div>
+    <div class="display-field">
+        @Html.DisplayFor(model => model.Salary)
+    </div>
+</fieldset>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id=Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
