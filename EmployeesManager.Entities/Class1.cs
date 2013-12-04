@@ -13,10 +13,8 @@ namespace EmployeesManager.Entities
         public Employee Manager { get; set; }
         public double Salary { get; set; }
 
-        public Employee()
-        {
+        public Employee() { }
 
-        }
         public Employee(int id, string name, Employee manager, double salary)
         {
             this.Id = id;
