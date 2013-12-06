@@ -12,10 +12,11 @@ namespace MvcApplication.Controllers
 {
     public class EmployeesController : Controller
     {
-        
+        EmployeeService empServ=new EmployeeService();
+
         public ActionResult Index(int? page)
         {
-            EmployeeService empServ = new EmployeeService();
+           // empServ = new EmployeeService();
             List<Employee> employeesList;
             List<EmployeeModel> employeeModelList=new List<EmployeeModel>();
 
@@ -83,6 +84,11 @@ namespace MvcApplication.Controllers
 
             }
 
+            SelectListItem nullItem = new SelectListItem();
+            nullItem.Text = "";
+            nullItem.Value =null;
+            myList.Add(nullItem);
+
             return myList;
 
         }
@@ -104,14 +110,15 @@ namespace MvcApplication.Controllers
             try
             {
                 List<Employee> l=(List<Employee>)Session["list"];
-                employee.Id = l.Max(x => x.Id)+1;
                 employee.Manager = getEmployeeById(employee.Manager.Id);
                 l.Add(employee);
+                empServ.addToDatabase(employee);
 
                 return RedirectToAction("Index");
             }
             catch
             {
+              //  ViewBag.MyList = getDropDownList();
                 return View();
             }
         }
@@ -129,10 +136,12 @@ namespace MvcApplication.Controllers
                     Employee emp = listEmployees.ElementAt(i);
                     if (emp.Manager != null && emp.Manager.Id == employeeToDelete.Id)
                         emp.Manager = null;
+                    empServ.updateDatabase(emp);
 
                 }
 
                 listEmployees.Remove(employeeToDelete);
+                empServ.deleteFromDatabase(id);
 
                 return RedirectToAction("Index");
             }
@@ -145,7 +154,10 @@ namespace MvcApplication.Controllers
         public ActionResult Edit(int id)
         {
                 Employee employeeToEdit = getEmployeeById(id);        
-                ViewBag.id = employeeToEdit.Manager.Id;
+                if(employeeToEdit.Manager!=null)
+                    ViewBag.id = employeeToEdit.Manager.Id;
+                else
+                    ViewBag.id = null ;
                 ViewBag.MyList=getDropDownList();
 
                 return View(employeeToEdit);
@@ -164,6 +176,8 @@ namespace MvcApplication.Controllers
                 employeeToEdit.Manager = manager;
                 employeeToEdit.Name = employee.Name;
                 employeeToEdit.Salary = employee.Salary;
+
+                empServ.updateDatabase(employeeToEdit);
                
                 return RedirectToAction("Index");
             }
